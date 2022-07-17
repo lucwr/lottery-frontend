@@ -62,10 +62,10 @@ export default function LotteryEntrance() {
     }
 
     useEffect(() => {
-        if (isWeb3Enabled) {
+        if (isWeb3Enabled && raffleAddress) {
             updateUI();
         }
-    }, [isWeb3Enabled]);
+    }, [isWeb3Enabled, raffleAddress]);
 
     // useMoralisQuery("WinnerPicked", (q) => q, [], {
     //     live: true,
@@ -122,7 +122,7 @@ export default function LotteryEntrance() {
                     <div>Recent Winner: {recentWinner} </div>
                 </>
             ) : (
-                <div> No Raffle Address Deteched </div>
+                <div>Please connect to a supported chain </div>
             )}
         </div>
     );
