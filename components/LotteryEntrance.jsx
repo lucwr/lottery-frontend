@@ -68,12 +68,16 @@ export default function LotteryEntrance() {
         }
     }, [isWeb3Enabled, raffleAddress]);
 
-    // useMoralisQuery("WinnerPicked", (q) => q, [], {
+    // const {
+    //     data: winnerPickedData,
+    //     error: winnerPickedError,
+    //     isLoading: winnerPickedIsLoading,
+    // } = useMoralisQuery("WinnerPicked", (query) => query, [], {
     //     live: true,
     // });
 
     // useMoralisSubscription("WinnerPicked", (q) => q, [], {
-    //     onCreate: (data) => console.log(data),
+    //     onCreate: (data) => console.log("data", data),
     //     // onUpdate: (data) => console.log(data),
     //     // onEnter: (data) => console.log(data),
     //     enabled: true,
@@ -107,6 +111,8 @@ export default function LotteryEntrance() {
                             await enterRaffle({
                                 onSuccess: handleSuccess,
                                 onError: (error) => console.log(error),
+                                onComplete: () =>
+                                    setNotification("Waiting for transaction confirmation."),
                             });
                         }}
                         disabled={isLoading || isFetching}
