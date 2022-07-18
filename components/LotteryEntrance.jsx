@@ -15,7 +15,8 @@ export default function LotteryEntrance() {
     const raffleAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null;
     const [entranceFee, setEntranceFee] = useState("0");
     const [numberOfPlayers, setNumberOfPlayers] = useState("0");
-    const [recentWinner, setRecentWinner] = useState("0");
+    const [recentWinner, setRecentWinner] = useState("0x0");
+    const [notification, setNotification] = useState("");
 
     const dispatch = useNotification();
 
@@ -81,6 +82,7 @@ export default function LotteryEntrance() {
     const handleSuccess = async function (tx) {
         await tx.wait(1);
         handleNewNotification(tx);
+        setNotification("Winner will be selected after 30 seconds");
         updateUI();
     };
 
@@ -100,7 +102,7 @@ export default function LotteryEntrance() {
             {raffleAddress ? (
                 <>
                     <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto mb-3"
                         onClick={async function () {
                             await enterRaffle({
                                 onSuccess: handleSuccess,
@@ -120,9 +122,10 @@ export default function LotteryEntrance() {
                     <div>Entrance Fee:{ethers.utils.formatUnits(entranceFee, "ether")} ETH </div>
                     <div>Number of Players: {numberOfPlayers} </div>
                     <div>Recent Winner: {recentWinner} </div>
+                    <p className="font-bold text-green-700 pt-5">{notification}</p>
                 </>
             ) : (
-                <div>Please connect to a supported chain </div>
+                <div className="font-bold text-green-700">Only Rinkeby Tesnet is supported.</div>
             )}
         </div>
     );
