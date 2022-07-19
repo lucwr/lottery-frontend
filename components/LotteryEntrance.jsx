@@ -105,33 +105,56 @@ export default function LotteryEntrance() {
             <h1 className="py-4 font-bold text-3xl">Lottery</h1>
             {raffleAddress ? (
                 <>
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto mb-3"
-                        onClick={async function () {
-                            await enterRaffle({
-                                onSuccess: handleSuccess,
-                                onError: (error) => console.log(error),
-                                onComplete: () =>
-                                    setNotification("Waiting for transaction confirmation."),
-                            });
-                        }}
-                        disabled={isLoading || isFetching}
-                    >
-                        {isLoading || isFetching ? (
-                            <div className="px-7">
-                                <div className="animate-spin spinner-border h-6 w-6 border-b-2 rounded-full"></div>
+                    <div className="flex flex-col md:flex-row">
+                        <div className="w-full md:w-1/2">
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto mb-3"
+                                onClick={async function () {
+                                    await enterRaffle({
+                                        onSuccess: handleSuccess,
+                                        onError: (error) => console.log(error),
+                                        onComplete: () =>
+                                            setNotification("Waiting for transaction confirmation."),
+                                    });
+                                }}
+                                disabled={isLoading || isFetching}
+                            >
+                                {isLoading || isFetching ? (
+                                    <div className="px-7">
+                                        <div className="animate-spin spinner-border h-6 w-6 border-b-2 rounded-full"></div>
+                                    </div>
+                                ) : (
+                                    "Enter Raffle"
+                                )}
+                            </button>
+                            <div>Entrance Fee:{ethers.utils.formatUnits(entranceFee, "ether")} ETH</div>
+                            <div>Number of Players: {numberOfPlayers} </div>
+                            <div>
+                                Recent Winner: {recentWinner.slice(0, 6)}...
+                                {recentWinner.slice(recentWinner.length - 8)}
                             </div>
-                        ) : (
-                            "Enter Raffle"
-                        )}
-                    </button>
-                    <div>Entrance Fee:{ethers.utils.formatUnits(entranceFee, "ether")} ETH </div>
-                    <div>Number of Players: {numberOfPlayers} </div>
-                    <div>Recent Winner: {recentWinner} </div>
+                        </div>
+                        <div className="w-full md:w-1/2">
+                            <h2 className="pb-4 font-bold text-xl">How it works</h2>
+                            <ul>
+                                <li>
+                                    Enter the lottery with {ethers.utils.formatUnits(entranceFee, "ether")}{" "}
+                                    ETH
+                                </li>
+                                <li>Wait for 30 seconds for the winner to be picked</li>
+                                <li>The winner is credited with the token</li>
+                            </ul>
+                        </div>
+                    </div>
                     <p className="font-bold text-green-700 pt-5">{notification}</p>
                 </>
             ) : (
-                <div className="font-bold text-green-700">Only Rinkeby Tesnet is supported.</div>
+                <>
+                    {!isWeb3Enabled ? (
+                        <div className="font-bold pb-5">Connect your wallet to enter the lottery</div>
+                    ) : null}
+                    <div className="font-bold text-green-700">Only Rinkeby Testnet is supported.</div>
+                </>
             )}
         </div>
     );
